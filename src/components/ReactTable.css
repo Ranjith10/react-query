@@ -1,0 +1,35 @@
+.people-table {
+    background-color: #f5f5f5;
+    margin: 30px;
+    border-radius: 10px;
+    padding: 20px;
+    width: calc(100% - 100px);
+}
+table {
+    width: 100%;
+}
+table > thead > tr > th {
+    text-align: left;
+    text-transform: uppercase;
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid;
+}
+table > tbody > tr {
+    height: 60px;
+    text-align: left;
+}
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 50px;
+}
+.pagination > button {
+    margin: 0 10px 0 0;
+    height: 30px;
+    cursor: pointer;
+    border: 1px solid;
+}
+.pagination > button:disabled {
+    cursor: not-allowed;
+}

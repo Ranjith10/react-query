@@ -1,18 +1,24 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import axios from 'axios'
-import {useQuery} from 'react-query'
+import { useQuery } from 'react-query'
 import { useTable, usePagination } from 'react-table'
 
 import './ReactTable.css'
 
-// const PAGE_SIZE = 10
+const fetchPeople = async (key, pageIndex) => {
+    let peopleList = await axios.get(
+        `https://swapi.dev/api/people/?page=${pageIndex + 1}`,
+    )
+    return peopleList
+}
 
-const PeopleTable = ({
-    columns,
-}) => {
-
-    const {data: peopleList, isLoading, } = useQuery('fetchPeople', fetchPeople)
+const PeopleTable = ({ columns }) => {
+    const [pageIndex, setPageIndex] = useState(0)
+    const { data: peopleList, isLoading } = useQuery(
+        ['fetchPeople', pageIndex],
+        fetchPeople,
+    )
 
     const {
         getTableProps,
@@ -20,14 +26,7 @@ const PeopleTable = ({
         headerGroups,
         page,
         prepareRow,
-        canPreviousPage,
-        canNextPage,
-        pageCount,
-        gotoPage,
-        nextPage,
-        previousPage,
         pageOptions,
-        state: { pageIndex, pageSize },
     } = useTable(
         {
             columns,
@@ -37,6 +36,16 @@ const PeopleTable = ({
         },
         usePagination,
     )
+
+    const previousPagePossible = () => {
+        if(pageIndex === 0) return true
+        return false
+    }
+
+    const nextPagePossible = () => {
+        if(pageIndex === pageOptions.length) return true
+        return false
+    }
 
     return (
         <div className = 'people-table'>
@@ -81,25 +90,16 @@ const PeopleTable = ({
             {!isLoading && (
                 <div className = 'pagination'>
                     <button
-                        disabled = { !canPreviousPage }
-                        onClick = { () => gotoPage(0) }
-                    >
-                        {'<<'}
-                    </button>{' '}
-                    <button
-                        disabled = { !canPreviousPage }
-                        onClick = { () => previousPage() }
+                        disabled = { previousPagePossible() }
+                        onClick = { () => setPageIndex(i => i - 1) }
                     >
                         {'<'}
                     </button>{' '}
-                    <button disabled = { !canNextPage } onClick = { () => nextPage() }>
-                        {'>'}
-                    </button>{' '}
-                    <button
-                        disabled = { !canNextPage }
-                        onClick = { () => gotoPage(pageCount - 1) }
+                    <button  
+                        disabled = { nextPagePossible() }
+                        onClick = { () => setPageIndex(i => i + 1) }
                     >
-                        {'>>'}
+                        {'>'}
                     </button>{' '}
                     <span>
                         Page{' '}
@@ -117,13 +117,7 @@ const PeopleTable = ({
     )
 }
 
-const fetchPeople = async () => {
-    let peopleList = await axios.get(`https://swapi.dev/api/people/?page=1`)
-    return peopleList
-}
-
 const ReactTable = () => {
-
     let columns = useMemo(
         () => [
             {
@@ -156,13 +150,9 @@ const ReactTable = () => {
             },
         ],
         [],
-    ) 
-
-    return (
-        <PeopleTable
-            columns = { columns }
-        />
     )
+
+    return <PeopleTable columns = { columns } />
 }
 
 export default ReactTable

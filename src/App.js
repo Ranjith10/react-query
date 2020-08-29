@@ -3,6 +3,7 @@ import { ReactQueryDevtools } from 'react-query-devtools'
 import { ReactQueryConfigProvider } from 'react-query'
 
 import ReactTable from './components/ReactTable'
+import ReactMutation from './components/ReactMutation'
  
  const queryConfig = {
    shared: {
@@ -31,6 +32,7 @@ function App() {
             <div className = 'App'>
                 <ReactTable />
                 <ReactQueryDevtools />
+                <ReactMutation />
             </div>
         </ReactQueryConfigProvider>
     )

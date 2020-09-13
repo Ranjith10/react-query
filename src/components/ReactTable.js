@@ -15,7 +15,7 @@ const fetchPeople = async (key, pageIndex) => {
 
 const PeopleTable = ({ columns }) => {
     const [pageIndex, setPageIndex] = useState(0)
-    const { data: peopleList, isLoading } = useQuery(
+    const { data: peopleList, isLoading, refetch, isFetching } = useQuery(
         ['fetchPeople', pageIndex],
         fetchPeople,
     )
@@ -47,8 +47,14 @@ const PeopleTable = ({ columns }) => {
         return false
     }
 
+    const handleRefetch = () => {
+        setPageIndex(0)
+        refetch()
+    }
+    console.log({isLoading, isFetching})
     return (
         <div className = 'people-table'>
+            <div className = 'refetch-test' onClick = { () => handleRefetch() }>Refetch testing</div>
             <table { ...getTableProps() }>
                 <thead>
                     {headerGroups.map((headerGroup, headerIndex) => (
@@ -70,7 +76,7 @@ const PeopleTable = ({ columns }) => {
                     ))}
                 </thead>
                 <tbody { ...getTableBodyProps() }>
-                    {!isLoading &&
+                    {(!isLoading || !isFetching ) &&
                         page.map((row, rowIndex) => {
                             prepareRow(row)
                             return (
@@ -87,7 +93,7 @@ const PeopleTable = ({ columns }) => {
                         })}
                 </tbody>
             </table>
-            {!isLoading && (
+            {(!isLoading || !isFetching) && (
                 <div className = 'pagination'>
                     <button
                         disabled = { previousPagePossible() }
@@ -109,10 +115,10 @@ const PeopleTable = ({ columns }) => {
                     </span>
                 </div>
             )}
-            {isLoading && <Skeleton
+            {(isLoading || isFetching) && <Skeleton
                 count = { 10 } height = { 50 }
                 width = { '100%' }
-                          />}
+                                          />}
         </div>
     )
 }

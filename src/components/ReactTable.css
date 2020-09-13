@@ -33,3 +33,15 @@ table > tbody > tr {
 .pagination > button:disabled {
     cursor: not-allowed;
 }
+.refetch-test {
+    display: flex;
+    width: 150px;
+    font-weight: 600;
+    background: #b6cdff;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0 10px 0;
+    cursor: pointer;
+    border-radius: 6px;
+}

@@ -9,6 +9,7 @@
         "react-loading-skeleton": "^2.1.1",
         "react-query": "^2.8.0",
         "react-query-devtools": "^2.4.4",
+        "react-query-latest": "npm:react-query@^3.13.12",
         "react-scripts": "3.4.3",
         "react-table": "^7.5.0"
     },
